@@ -22,13 +22,13 @@
  *****************************************************************/
 
 
-package org.example;
+package org.example.meeting;
 
 import CalendarBean.JCalendar;
 import jade.core.AID;
 import jade.gui.GuiEvent;
-import org.example.ontology.Appointment;
-import org.example.ontology.Person;
+import org.example.meeting.ontology.Appointment;
+import org.example.meeting.ontology.Person;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -56,33 +56,30 @@ public class MainFrame extends JFrame {
     // Used for addNotify check.
     boolean fComponentsAdjusted = false;
     //{{DECLARE_CONTROLS
-    JCalendar calendar1;
-    JTextArea textArea1;
-    JTextField textFieldErrMsg;
-    JLabel labelInsertDF;
-    JTextField textFieldDFAddress;
-    JList<String> listNames;
-    DefaultListModel<String> lModel;
-    JPanel p1;
-    JPanel p2;
-    JPanel p3;
-    JPanel p4;
-    JPanel p5;
-    JPanel calendarPanel;
-    JPanel descriptionPanel;
-    JPanel infoPanel;
-    JPanel persPanel;
-    JPanel listPanel;
-    JTextArea textArea2;
-    JLabel facilitatorMessage;
-    JTextField Info;
-    JLabel appointment;
+    JCalendar calendar1 = new JCalendar();
+    JTextArea textArea1 = new JTextArea("", 3, 0);
+    JLabel labelInsertDF = new JLabel("Insert agent address of the DF");
+    JTextField textFieldDFAddress = new JTextField(80);
+    DefaultListModel<String> listNamesModel = new DefaultListModel<>();
+    JList<String> listNames = new JList<>(listNamesModel);
+    JPanel registerPanel = new JPanel();
+    JPanel calendarPanel = new JPanel();
+    JPanel calendarOuterPanel = new JPanel();
+    JPanel descriptionPanel = new JPanel();
+    JPanel infoPanel = new JPanel();
+    JPanel infoOuterPanel = new JPanel();
+    JPanel persPanel = new JPanel();
+    JPanel knownPersonPanel = new JPanel();
+    JPanel listPanel = new JPanel();
+    JTextArea textArea2 = new JTextArea("", 0, 0);
+    JLabel facilitatorMessage = new JLabel("Press Enter when done");
+    JTextField textFieldInfo = new JTextField();
     JLabel description;
-    JLabel LInfo;
-    JFrame facFrame;
-    JFrame knowFrame;
-    JButton doneButton;
-    JScrollPane sPane;
+    JLabel labelInfo = new JLabel("Information");
+    JFrame facFrame = new JFrame();
+    JFrame knowFrame = new JFrame();
+    JButton doneButton = new JButton("Done");
+    JScrollPane sPane = new JScrollPane(listNames, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     //{{DECLARE_MENUS
     JMenuBar mainMenuBar;
     JMenu menu1;
@@ -96,11 +93,9 @@ public class MainFrame extends JFrame {
     JMenuItem menuItem1;
 
     public MainFrame(MeetingSchedulerAgent a, String title) {
-        this(title);
         myAgent = a;
-    }
+        setTitle(title);
 
-    public MainFrame() {
         //{{INIT_CONTROLS
         Locale.setDefault(Locale.US);
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
@@ -108,32 +103,29 @@ public class MainFrame extends JFrame {
         setSize(300, 400);
 
         //pannello contenente la schermata principale
-        p2 = new JPanel();
-        p2.setLayout(new BoxLayout(p2, BoxLayout.Y_AXIS));
-        getContentPane().add(p2);
-        p2.setVisible(true);
-        p2.add(Box.createRigidArea(new Dimension(0, 25)));
+        calendarOuterPanel.setLayout(new BoxLayout(calendarOuterPanel, BoxLayout.Y_AXIS));
+        getContentPane().add(calendarOuterPanel);
+        calendarOuterPanel.setVisible(true);
+        calendarOuterPanel.add(Box.createRigidArea(new Dimension(0, 25)));
 
-        calendar1 = new JCalendar();
         calendar1.setFont(new Font("Dialog", Font.BOLD, 10));
         calendar1.addPropertyChangeListener(new Lis());
 
-        calendarPanel = new JPanel();
         calendarPanel.setLayout(new BoxLayout(calendarPanel, BoxLayout.X_AXIS));
         calendarPanel.add(Box.createRigidArea(new Dimension(15, 0)));
         calendarPanel.add(calendar1);
         calendarPanel.add(Box.createRigidArea(new Dimension(15, 0)));
-        p2.add(calendarPanel);
-        p2.add(Box.createRigidArea(new Dimension(0, 10)));
+        calendarOuterPanel.add(calendarPanel);
+        calendarOuterPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         //area di note sugli appuntamenti
         description = new JLabel("Appointment Description");
         description.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-        p2.add(description);
-        p2.add(Box.createRigidArea(new Dimension(0, 5)));
-        descriptionPanel = new JPanel();
+        calendarOuterPanel.add(description);
+        calendarOuterPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+
         descriptionPanel.setLayout(new BoxLayout(descriptionPanel, BoxLayout.X_AXIS));
         descriptionPanel.add(Box.createRigidArea(new Dimension(15, 0)));
-        textArea1 = new JTextArea("", 3, 0);
+
         textArea1.setEditable(false);
         textArea1.setLineWrap(true);
         textArea1.setAlignmentX(JComponent.CENTER_ALIGNMENT);
@@ -143,109 +135,104 @@ public class MainFrame extends JFrame {
         textArea1.setMaximumSize(new Dimension(700, 80));
         descriptionPanel.add(textArea1);
         descriptionPanel.add(Box.createRigidArea(new Dimension(15, 0)));
-        p2.add(descriptionPanel);
+        calendarOuterPanel.add(descriptionPanel);
 
         //pannello *register with a facilitator*
-        facFrame = new JFrame();
         facFrame.setVisible(false);
         facFrame.setSize(400, 150);
-        p1 = new JPanel();
-        p1.setLayout(new BoxLayout(p1, BoxLayout.Y_AXIS));
-        facFrame.getContentPane().add(p1);
-        p1.setVisible(true);
-        p1.add(Box.createRigidArea(new Dimension(0, 20)));
-        labelInsertDF = new JLabel("Insert agent address of the DF");
+        registerPanel.setLayout(new BoxLayout(registerPanel, BoxLayout.Y_AXIS));
+        facFrame.getContentPane().add(registerPanel);
+        registerPanel.setVisible(true);
+        registerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+
         labelInsertDF.setVisible(true);
         labelInsertDF.setAlignmentX(CENTER_ALIGNMENT);
         labelInsertDF.setFont(new Font("Dialog", Font.BOLD, 12));
-        p1.add(labelInsertDF);
-        p1.add(Box.createRigidArea(new Dimension(0, 10)));
-        textFieldDFAddress = new JTextField(80);
+        registerPanel.add(labelInsertDF);
+        registerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
         textFieldDFAddress.setVisible(true);
         textFieldDFAddress.setMinimumSize(new Dimension(100, 25));
         textFieldDFAddress.setPreferredSize(new Dimension(100, 25));
         textFieldDFAddress.setMaximumSize(new Dimension(200, 25));
         textFieldDFAddress.setAlignmentX(CENTER_ALIGNMENT);
-        p1.add(textFieldDFAddress);
-        p1.add(Box.createRigidArea(new Dimension(0, 20)));
-        facilitatorMessage = new JLabel("Press Enter when done");
+        registerPanel.add(textFieldDFAddress);
+        registerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+
         facilitatorMessage.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-        p1.add(facilitatorMessage);
-        p1.add(Box.createRigidArea(new Dimension(0, 20)));
+        registerPanel.add(facilitatorMessage);
+        registerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
         //pannello di *view known facilitator* e *view known persons*
-        knowFrame = new JFrame();
         knowFrame.setVisible(false);
 //  knowFrame.setTitle("view known");
         knowFrame.setSize(450, 400);
-        p3 = new JPanel();
-        p3.setLayout(new BoxLayout(p3, BoxLayout.Y_AXIS));
-        p3.setVisible(true);
-        knowFrame.getContentPane().add(p3);
-        p3.add(Box.createRigidArea(new Dimension(0, 20)));
+        knownPersonPanel.setLayout(new BoxLayout(knownPersonPanel, BoxLayout.Y_AXIS));
+        knownPersonPanel.setVisible(true);
+        knowFrame.getContentPane().add(knownPersonPanel);
+        knownPersonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         description = new JLabel();
         description.setVisible(true);
         description.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-        p3.add(description);
+        knownPersonPanel.add(description);
         knowFrame.setTitle("view known " + description.getText());
-        p3.add(Box.createRigidArea(new Dimension(0, 10)));
-        textArea2 = new JTextArea("", 0, 0);
+        knownPersonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
         textArea2.setVisible(true);
         textArea2.setLineWrap(true);
         textArea2.setEditable(false);
-        persPanel = new JPanel();
+
         persPanel.setLayout(new BoxLayout(persPanel, BoxLayout.X_AXIS));
         persPanel.add(Box.createRigidArea(new Dimension(15, 0)));
         persPanel.add(textArea2);
         persPanel.add(Box.createRigidArea(new Dimension(15, 0)));
-        p3.add(persPanel);
-        p3.add(Box.createRigidArea(new Dimension(0, 35)));
-        lModel = new DefaultListModel<>();
-        listNames = new JList<>(lModel);
+        knownPersonPanel.add(persPanel);
+        knownPersonPanel.add(Box.createRigidArea(new Dimension(0, 35)));
+
+
         //listNames.setMinimumSize(new Dimension(100,100));
         listNames.setFixedCellWidth(100);
         listNames.setVisibleRowCount(4);
-        sPane = new JScrollPane(listNames, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
         sPane.setVisible(true);
         //getContentPane().add(listNames);
-        listPanel = new JPanel();
+
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.X_AXIS));
         listPanel.add(Box.createRigidArea(new Dimension(15, 0)));
         listPanel.add(sPane);
         listPanel.add(Box.createRigidArea(new Dimension(15, 0)));
-        p3.add(listPanel);
-        p3.add(Box.createRigidArea(new Dimension(0, 20)));
-        doneButton = new JButton("Done");
+        knownPersonPanel.add(listPanel);
+        knownPersonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+
         doneButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         doneButton.addActionListener(new SymAction());
-        p3.add(doneButton);
-        p3.add(Box.createRigidArea(new Dimension(0, 20)));
+        knownPersonPanel.add(doneButton);
+        knownPersonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
         //pannello riportante le Infomrmazioni di sistema
-        p4 = new JPanel();
-        p4.setLayout(new BoxLayout(p4, BoxLayout.Y_AXIS));
-        p4.setVisible(true);
-        getContentPane().add(p4);
-        p4.add(Box.createRigidArea(new Dimension(0, 20)));
-        LInfo = new JLabel("Information");
-        LInfo.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-        p4.add(LInfo);
-        infoPanel = new JPanel();
+        infoOuterPanel.setLayout(new BoxLayout(infoOuterPanel, BoxLayout.Y_AXIS));
+        infoOuterPanel.setVisible(true);
+        getContentPane().add(infoOuterPanel);
+        infoOuterPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+
+        labelInfo.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+        infoOuterPanel.add(labelInfo);
+
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.X_AXIS));
         infoPanel.add(Box.createRigidArea(new Dimension(10, 0)));
-        Info = new JTextField();
-        Info.setVisible(true);
-        Info.setEditable(false);
+
+        textFieldInfo.setVisible(true);
+        textFieldInfo.setEditable(false);
 
 
-        Info.setFont(new Font("Dialog", Font.ITALIC, 10));
-        Info.setForeground(new Color(0));
-        Info.setBackground(new Color(16776960));
-        Info.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-        infoPanel.add(Info);
+        textFieldInfo.setFont(new Font("Dialog", Font.ITALIC, 10));
+        textFieldInfo.setForeground(new Color(0));
+        textFieldInfo.setBackground(new Color(16776960));
+        textFieldInfo.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+        infoPanel.add(textFieldInfo);
         infoPanel.add(Box.createRigidArea(new Dimension(10, 0)));
-        p4.add(infoPanel);
-        p4.add(Box.createRigidArea(new Dimension(0, 10)));
+        infoOuterPanel.add(infoPanel);
+        infoOuterPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         getContentPane().add(Box.createVerticalGlue());
 
 
@@ -292,11 +279,6 @@ public class MainFrame extends JFrame {
         setLocation(50, 50);
     }
 
-    public MainFrame(String title) {
-        this();
-        setTitle(title);
-    }
-
     public void addNotify() {
         // Record the size of the window prior to calling parents addNotify.
         Dimension d = getSize();
@@ -317,9 +299,9 @@ public class MainFrame extends JFrame {
         clearFrame();
         knowFrame.setVisible(true);
         description.setText("Known Facilitators");
-        lModel.clear();
+        listNamesModel.clear();
         for (Enumeration<AID> e = myAgent.getKnownDF(); e.hasMoreElements(); ) {
-            lModel.addElement(e.nextElement().getName());
+            listNamesModel.addElement(e.nextElement().getName());
         }
         currentAction = VIEW_KNOWN_DF;
         //listNames.select(0);
@@ -351,9 +333,9 @@ public class MainFrame extends JFrame {
         clearFrame();
         knowFrame.setVisible(true);
         description.setText("Known persons");
-        lModel.clear();
+        listNamesModel.clear();
         for (Enumeration<Person> e = myAgent.getKnownPersons(); e.hasMoreElements(); ) {
-            lModel.addElement(e.nextElement().getName());
+            listNamesModel.addElement(e.nextElement().getName());
         }
         currentAction = VIEW_KNOWN_PERSONS;
         listNames.setSelectedIndex(0);
@@ -364,8 +346,8 @@ public class MainFrame extends JFrame {
         Appointment a;
 
         clearFrame();
-        p2.setVisible(true);
-        p4.setVisible(true);
+        calendarOuterPanel.setVisible(true);
+        infoOuterPanel.setVisible(true);
         textArea1.setText("");
         Calendar c = calendar1.getCalendar();
         a = myAgent.getMyAppointment(c.getTime());
@@ -421,9 +403,9 @@ public class MainFrame extends JFrame {
     //stampa i msg di update
     void showErrorMessage(String text) {
         //clearFrame();
-        p4.setVisible(true);
+        infoOuterPanel.setVisible(true);
         //textFieldErrMsg.setVisible(true);
-        Info.setText(text);
+        textFieldInfo.setText(text);
         //System.err.println(text);
     }
 
@@ -437,7 +419,7 @@ public class MainFrame extends JFrame {
 
     void listNames_ItemStateChanged() {
         //String cur = listNames.getSelectedItem();
-        String cur = lModel.getElementAt(listNames.getSelectedIndex());
+        String cur = listNamesModel.getElementAt(listNames.getSelectedIndex());
         if (currentAction == VIEW_KNOWN_PERSONS)
             textArea2.setText(myAgent.getPerson(cur).toString());
         else if (currentAction == VIEW_KNOWN_DF)

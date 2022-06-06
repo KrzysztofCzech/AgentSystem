@@ -21,12 +21,12 @@
  Boston, MA  02111-1307, USA.
  *****************************************************************/
 
-package org.example;
+package org.example.meeting;
 
 import CalendarBean.JCalendar;
 import jade.gui.GuiEvent;
-import org.example.ontology.Appointment;
-import org.example.ontology.Person;
+import org.example.meeting.ontology.Appointment;
+import org.example.meeting.ontology.Person;
 
 import javax.swing.*;
 import javax.swing.border.Border;

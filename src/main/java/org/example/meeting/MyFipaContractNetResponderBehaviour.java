@@ -21,14 +21,14 @@
  *****************************************************************/
 
 
-package org.example;
+package org.example.meeting;
 
 import jade.domain.FIPAException;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.proto.ContractNetResponder;
 import jade.util.leap.Iterator;
-import org.example.ontology.Appointment;
+import org.example.meeting.ontology.Appointment;
 
 import java.util.Date;
 
