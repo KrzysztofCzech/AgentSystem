@@ -20,7 +20,7 @@
  Boston, MA  02111-1307, USA.
  *****************************************************************/
 
-package org.example;
+package org.example.meeting;
 
 import jade.core.AID;
 import jade.domain.FIPAException;
@@ -30,9 +30,9 @@ import jade.proto.ContractNetInitiator;
 import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
-import org.example.ontology.Appointment;
-import org.example.ontology.MSOntology;
-import org.example.ontology.Person;
+import org.example.meeting.ontology.Appointment;
+import org.example.meeting.ontology.MSOntology;
+import org.example.meeting.ontology.Person;
 
 import java.util.Calendar;
 import java.util.Date;

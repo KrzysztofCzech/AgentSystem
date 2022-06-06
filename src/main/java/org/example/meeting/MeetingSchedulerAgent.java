@@ -22,7 +22,7 @@
  *****************************************************************/
 
 
-package org.example;
+package org.example.meeting;
 
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
@@ -42,9 +42,9 @@ import jade.util.Logger;
 import jade.util.leap.ArrayList;
 import jade.util.leap.Iterator;
 import jade.util.leap.List;
-import org.example.ontology.Appointment;
-import org.example.ontology.MSOntology;
-import org.example.ontology.Person;
+import org.example.meeting.ontology.Appointment;
+import org.example.meeting.ontology.MSOntology;
+import org.example.meeting.ontology.Person;
 
 import java.util.*;
 
