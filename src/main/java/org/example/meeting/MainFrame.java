@@ -22,13 +22,13 @@
  *****************************************************************/
 
 
-package org.example;
+package org.example.meeting;
 
 import CalendarBean.JCalendar;
 import jade.core.AID;
 import jade.gui.GuiEvent;
-import org.example.ontology.Appointment;
-import org.example.ontology.Person;
+import org.example.meeting.ontology.Appointment;
+import org.example.meeting.ontology.Person;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -93,11 +93,9 @@ public class MainFrame extends JFrame {
     JMenuItem menuItem1;
 
     public MainFrame(MeetingSchedulerAgent a, String title) {
-        this(title);
         myAgent = a;
-    }
+        setTitle(title);
 
-    public MainFrame() {
         //{{INIT_CONTROLS
         Locale.setDefault(Locale.US);
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
@@ -279,11 +277,6 @@ public class MainFrame extends JFrame {
         listNames.addListSelectionListener(new NameListener());
         menuItem5.addActionListener(lSymAction);
         setLocation(50, 50);
-    }
-
-    public MainFrame(String title) {
-        //this();
-        setTitle(title);
     }
 
     public void addNotify() {

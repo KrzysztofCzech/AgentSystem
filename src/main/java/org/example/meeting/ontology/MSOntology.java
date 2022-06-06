@@ -21,7 +21,7 @@
  Boston, MA  02111-1307, USA.
  *****************************************************************/
 
-package org.example.ontology;
+package org.example.meeting.ontology;
 
 import jade.content.onto.BCReflectiveIntrospector;
 import jade.content.onto.BasicOntology;

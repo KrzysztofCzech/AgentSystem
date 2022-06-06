@@ -22,13 +22,13 @@
  *****************************************************************/
 
 
-package org.example;
+package org.example.meeting;
 
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import org.example.ontology.Appointment;
+import org.example.meeting.ontology.Appointment;
 
 
 /**

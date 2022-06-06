@@ -22,7 +22,7 @@
  *****************************************************************/
 
 
-package org.example;
+package org.example.meeting;
 
 import jade.gui.GuiEvent;
 
