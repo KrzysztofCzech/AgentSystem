@@ -51,6 +51,17 @@ public class BookSellerAgent extends Agent {
         myGui = new BookSellerGui(this);
         myGui.showGui();
 
+        Object[] args = getArguments();
+        if (args != null && args.length > 1) {
+            updateCatalogue((String) args[0],Integer.parseInt((String) args[1]));
+        }
+
+        updateCatalogue("book1", 150);
+        updateCatalogue("book2", 300);
+
+
+
+
         // Register the book-selling service in the yellow pages
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(getAID());

@@ -34,11 +34,12 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
+
 public class BookBuyerAgent extends Agent {
     // The title of the book to buy
     private String targetBookTitle;
     // The list of known seller agents
-    private AID[] sellerAgents;
+    private AID[] sellerAgents = {new AID("seller1", AID.ISLOCALNAME), new AID("seller2", AID.ISLOCALNAME)};
 
     // Put agent initializations here
 	@Override
